@@ -1,0 +1,112 @@
+<div class="scene">
+  <!-- PANTALLA DE BIENVENIDA -->
+  <div class="welcome-screen" *ngIf="showWelcome">
+    <div class="welcome-box">
+      <h1 class="welcome-title">💕 Recuerdos Especiales 💕</h1>
+      <p class="welcome-text">
+        Estás a punto de ver algo muy especial.<br>
+        ¿Quieres continuar?
+      </p>
+      <div class="welcome-buttons">
+        <button class="btn-start" (click)="startContent()">Sí, quiero verlo ❤️</button>
+      </div>
+    </div>
+  </div>
+
+  <!-- CONTENIDO PRINCIPAL (solo se muestra después de aceptar) -->
+  <ng-container *ngIf="contentStarted">
+    <!-- Botón de control de música -->
+    <button class="music-control" (click)="toggleMusic(); $event.stopPropagation()">
+      {{ isMusicPlaying ? '🔊' : '🔇' }}
+    </button>
+
+    <!-- SECCIÓN PRINCIPAL -->
+    <div class="story" *ngIf="currentSection === 'main'">
+      <h1 class="title">¿Te acuerdas cuando nos conocimos?</h1>
+      <p class="text">
+        Ese momento cambió todo, sin que lo supiéramos.
+      </p>
+      
+      <div class="main-buttons">
+        <button class="btn-main-yes" (click)="onMainAnswer(true)">Sí ❤️</button>
+        <button class="btn-main-no" (click)="onMainAnswer(false)">No</button>
+      </div>
+    </div>
+
+    <!-- SECCIÓN "SÍ" -->
+    <div class="story story-yes" *ngIf="currentSection === 'yes'">
+      <!-- PRIMER TEXTO (10 segundos) -->
+      <div *ngIf="showFirstText" class="first-text-section" [class.fading]="isTextFading">
+        <h1 class="title">Gracias por recordar ❤️</h1>
+        <div class="text-container">
+          <p class="text-line">El tiempo que pasé contigo fue único,</p>
+          <p class="text-line">los momentos y películas que vimos</p>
+          <p class="text-line">serán inolvidables para mí.</p>
+          <p class="text-line">Sé que es el día de los inocentes,</p>
+          <p class="text-line">pero son reales los sentimientos</p>
+          <p class="text-line">y momentos que pude vivir gracias a ti.</p>
+          <p class="text-line">Espero que esto pueda significar algo para ti,</p>
+          <p class="text-line">ya que sé que estarás muy ocupada en estos días</p>
+          <p class="text-line">y el esperar el tiempo para poder estar</p>
+          <p class="text-line">de nuevo contigo se hará muy largo y doloroso.</p>
+        </div>
+      </div>
+
+      <!-- SEGUNDO TEXTO (después de 15 segundos) -->
+      <div *ngIf="showSecondText" class="second-text-section">
+        <h1 class="title">Un viaje inolvidable ✨</h1>
+        <div class="text-container">
+          <p class="text-line">Fueron muchas películas y momentos que viví gracias a ti,</p>
+          <p class="text-line">pude ser mejor persona y crecer contigo,</p>
+          <p class="text-line">pude acompañarte en los buenos y malos momentos,</p>
+          <p class="text-line">y a pesar de todo espero poder ser especial para ti.</p>
+          <p class="text-line">Un largo viaje hasta acá señorita,</p>
+          <p class="text-line">un gusto que seas tú la persona que conocí.</p>
+        </div>
+
+        <div class="screenshot-message">
+          <p class="screenshot-text">📸 Manda captura de esto si llegaste hasta acá 📸</p>
+        </div>
+      </div>
+    </div>
+
+    <!-- SECCIÓN "NO" -->
+    <div class="story story-no" *ngIf="currentSection === 'no'">
+      <h1 class="title">{{ getNoMessage() }}</h1>
+      <p class="text">
+        Por favor, inténtalo de nuevo...
+      </p>
+      
+      <div class="main-buttons">
+        <button 
+          class="btn-main-yes" 
+          (click)="onMainAnswer(true)"
+          [style.transform]="'scale(' + yesButtonScale + ')'"
+          [style.transition]="'transform 0.3s ease'">
+          Sí ❤️
+        </button>
+        <button 
+          *ngIf="shouldShowNoButton()"
+          class="btn-main-no" 
+          (click)="onMainAnswer(false)"
+          [style.transform]="'scale(' + noButtonScale + ')'"
+          [style.transition]="'transform 0.3s ease'">
+          No
+        </button>
+      </div>
+    </div>
+
+    <div class="rain" *ngIf="showRain">
+      <div 
+        *ngFor="let drop of rainDrops; trackBy: trackByDrop"
+        class="rain-drop"
+        [style.left.%]="drop.left"
+        [style.top.px]="-300"
+        [style.width.px]="drop.width"
+        [style.height.px]="drop.height"
+        [style.animation-duration.s]="drop.duration"
+        [style.background-image]="'url(assets/img/' + drop.imgNumber + '.jpg)'"
+      ></div>
+    </div>
+  </ng-container>
+</div>
